@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Arrays</title>
+</head>
+<body>
+	<p id="initial"></p>
+	<p id="result1"></p>
+	<p id="result2"></p>
+	<p id="result3"></p>
+	<p id="result4"></p>
+	<script>
+		var inArray = [1, 2, 3, 4, 5, 3, 6, 7, 8, 8, 8, -3, 4 ];
+		var initial, res1, res2, res3, res4;
+		initial = document.getElementById('initial');
+		res1 = document.getElementById('result1');
+		res2 = document.getElementById('result2');
+		res3 = document.getElementById('result3');
+		res4 = document.getElementById('result4');
+
+		initial.innerHTML = "Initial Array: " + inArray;
+		res1.innerHTML = "Reversed Array: " + reverseArray();
+		res2.innerHTML = "Minimal odd number: " + findMinOddNumber();
+		res3.innerHTML = "Arithmetic average: " + findAverage();
+		res4.innerHTML = "Repeated elements:<br>" + findRepeatedElements();
+
+    
+		function reverseArray() {
+			var revArray = [];
+
+			for (var i = 0; i < inArray.length; i++) {
+				revArray[i] = inArray[inArray.length - 1 - i]
+			}
+
+			return  revArray;
+		}
+	
+		
+		function findMinOddNumber() {
+			var minOdd = Infinity;
+
+			for (var i = 0; i < inArray.length; i++) {
+				if ( (inArray[i] % 2) && (inArray[i] < minOdd) ) {
+						minOdd = inArray[i];
+				}
+			}
+
+			return  minOdd;
+		}
+
+		
+
+		function findAverage() {
+			var sum = 0, average;
+
+			for (var i = 0; i < inArray.length; i++) {
+				sum += inArray[i];
+			}
+			average = sum / inArray.length;
+
+			return average;
+		}
+		
+
+//owm version
+		function findRepeatedElements() {
+			var repeat = [], curElement, out = "";
+
+			for (var i = 0; i < inArray.length; i++) {
+				curElement = inArray[i];
+
+				if( repeat[curElement] ) {
+					repeat[curElement]++;
+				} else {
+					repeat[curElement] = 1;
+				}
+				
+			}
+
+			for (var i = 0; i < repeat.length; i++) {
+
+				if( repeat[i] >= 2 ) {
+					out += 'Element - ' + i + 
+					' repeated ' + repeat[i] + ' times<br>';
+				}
+					
+			}
+
+			return out;
+		}
+
+
+/*better version - in class
+		function findNumberRepeat() {
+ 			var result = {}, item;
+
+			for (var i = 0; i < inArray.length; i++) {
+				item = inArray[i];
+
+				if ( result[item] ) {
+					result[item]++;
+				} else if ( inArray.indexOf(item, i+1) > -1 ) {
+		 			result[item] = 1;
+				}
+				
+		 	}
+
+		 	return result;
+		}
+*/
+	</script>
+</body>
+</html>
