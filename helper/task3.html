@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>for</title>
+	<style>
+		#user-ask-field {
+			width: 800px;
+			margin: 0 auto;
+			padding: 15px;
+			border-radius: 7px;
+			background: #AAABC6;
+			text-align: center;
+		}
+		pre {
+			padding: 20px;
+			text-align: left;
+		}
+	
+		.btn {
+			width: 120px;
+			height: 40px;
+			background: #AF7A4A;
+			border-radius: 7px;
+			cursor: pointer;
+			outline: none;
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			margin: 15px;
+		}
+
+
+
+		#table-box {
+			padding: 15px;
+			margin: 0 auto;
+			background: #C1BCF9;
+			border: 1px solid grey;
+			border-radius: 7px;
+		}
+		#table-box > table {
+			margin: 0 auto;
+		}
+		#table-box > table div{
+			border-radius: 50%;
+			border: 1px solid grey;
+			width: 30px;
+			height: 30px;
+		}
+		#table-box > table div>*{
+			vertical-align: middle;
+		}
+		#table-box > table div:after{
+			content: '';
+			display: inline-block;
+			height: 100%;
+			vertical-align: middle;
+		}
+
+		.e-1-1 div{
+			background: #9ACD32;
+		}
+		.e-1-2 div{
+			background: #191970;
+		}
+		.e-1-3 div{
+			background: #FF0000;
+		}
+		.e-2-1 div{
+			background: #33691E;
+		}
+		.e-2-2 div{
+			background: #00BCD4;
+		}
+		.e-2-3 div{
+			background: #9E9E9E;
+		}
+	</style>
+	<script type="text/javascript">
+
+
+		function TestLoopFor () {
+			this.element = document.createElement('div');
+			this.element.id = 'user-ask-field';
+			this.element.innerHTML = '<h3>Учимся использовать "for" при обработке двумерного массива</h3><pre class="expression">\
+var array = матрица заданного размера;<br/>\
+for( var key = 0; key < array.length; key++ ) {<br/>\
+	if(<input id="expression-0" type="text" placeholder="input your exprassion / false" value="(key < 13) || (key > array.length - 13)">) {<br/>\
+<br/>		for(var i = 0; i < array[key].length; i++) {\
+<br/>			if (<input id="expression-1-1" type="text" placeholder="input your exprassion / false" value="(i < 13) || (i > array.length - 13)">) {\
+<br/>				// код который покрасит ячекуй в зеленый\
+<br/>			} else if (<input id="expression-1-2" type="text" placeholder="input your exprassion / false" value="false">) {\
+<br/>				// код который покрасит ячекуй в синий\
+<br/>			} else {\
+<br/>				// код который покрасит ячекуй в красный\
+<br/>			}\
+<br/>		};\
+<br/>	} else {\
+<br/>		for(var i = 0; i < array[key].length; i++) {\
+<br/>			if (<input id="expression-2-1" type="text" placeholder="input your exprassion / false" value="( key == i ) || ( key == array.length - i)">) {\
+<br/>				// код который покрасит ячекуй в темно зеленый\
+<br/>			} else if (<input id="expression-2-2" type="text" placeholder="input your exprassion / false" value="(i > 12) && (key > i) && (key < array.length - i)">) {\
+<br/>				// код который покрасит ячекуй в светло голубой\
+<br/>			} else {\
+<br/>				// код который покрасит ячекуй в серый\
+<br/>			}\
+<br/>		};\
+<br/>	}\
+<br/>};</pre><button class="btn">render</button><button class="btn">change matrix</button><div id="table-box"></div>';
+		};
+		TestLoopFor.prototype = {
+			constructor: TestLoopFor,
+			table: {
+				start: '<table id="table"><tbody>',
+				end:'</tbody></table>',
+				tr: {
+					start: '<tr>',
+					end: '</tr>'
+				},
+				td: function( type, val ) {
+					return '<td class="e-'+type+'""><div>'+val+'</div></td>';
+				}
+			},
+			
+			rebuildArray: function() {
+				leng = prompt( 'укажите размер матрици', 50 );
+				this.array = [];
+				for( ; leng > this.array.length; ) {
+					var key = this.array.push( [] )-1;
+					for( ; leng > this.array[key].length; ) {
+						this.array[key].push( this.array[key].length );
+					};
+				};
+			},
+			
+			createTable: function() {
+				var result = this.table.start, array = this.array;
+				for(var key = 0; key < array.length; key++) {
+					result += this.table.tr.start
+					if( eval(this.getExpression('0') ) ) {
+						for(var i = 0; i < array[key].length; i++) {
+							if ( eval(this.getExpression('1-1') ) ) {
+								result += this.table.td('1-1', array[key][i]);
+							} else if ( eval(this.getExpression('1-2') ) ) {
+								result += this.table.td('1-2', array[key][i]);
+							} else {
+								result += this.table.td('1-3', array[key][i]);
+							}
+						};
+					} else {
+						for(var i = 0; i < array[key].length; i++) {
+							if ( eval(this.getExpression('2-1') ) ) {
+								result += this.table.td('2-1', array[key][i]);
+							} else if ( eval(this.getExpression('2-2') ) ) {
+								result += this.table.td('2-2', array[key][i]);
+							} else {
+								result += this.table.td('2-3', array[key][i]);
+							}
+						};
+					}
+					result += this.table.tr.end;
+				};
+				return result+this.table.end;
+			},
+			getExpression: function( name ) {
+				try{
+					var res = document.getElementById('expression-'+name).value;
+				}catch (err) {
+					console.warn('Ошибка расчета выражения', err);
+					var res = false;
+				};
+
+				return res;
+			},
+
+			render: function() {
+				try{
+					var template = this.createTable();
+				}catch (err) {
+					console.warn('Ошибка создания растрового массива', err);
+					var template = '<p>Ошибка !!!<br/> А вы что думали ?</p>';
+				};
+
+				this.tableBox.innerHTML = template;
+			},
+
+			initialized:function() {
+				var testFor = this;
+
+				document.body.appendChild(this.element);
+				this.tableBox = document.getElementById('table-box');
+				var btns = document.getElementsByClassName('btn');
+
+				btns[0].addEventListener('mousedown', function() { testFor.render(); },false);
+				btns[1].addEventListener('mousedown', function() { testFor.rebuildArray(); },false)
+
+				// this.rebuildArray();
+
+				// this.render();
+			}
+		};
+
+		window.onload = function() {
+			new TestLoopFor().initialized();
+		};
+	</script>
+</head>
+<body>
+</body>
+</html>
